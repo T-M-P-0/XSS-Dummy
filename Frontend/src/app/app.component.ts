@@ -1,18 +1,19 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserDto } from '../../../Shared/user.dto';
+import { Component, OnInit } from '@angular/core';
+import { PrimeNGConfig } from 'primeng/api';
+
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
-  public currentUser: UserDto = new UserDto("", "");
+export class AppComponent implements OnInit {
   title = 'Frontend';
-  constructor(private router: Router) {}
-  logout() {
-    // this.authenticationService.logout();
-    this.router.navigate(['/login']);
+
+  constructor(private primengConfig: PrimeNGConfig) {
+  }
+
+  ngOnInit() {
+    this.primengConfig.ripple = true;
   }
 }
