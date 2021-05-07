@@ -1,9 +1,12 @@
 const express = require('express');
 const rethinkDB = require('rethinkdb');
+const cors = require('cors');
+
 const databaseName = "XSSDemoDatabase";
 const app = express();
 const port = 41005;
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 
