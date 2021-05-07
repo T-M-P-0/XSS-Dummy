@@ -27,7 +27,15 @@ export class LoginComponent implements OnInit {
   public onSubmit(): void {
     this.isLoading = true;
     let user = new UserDto(this.username || "", this.password || "");
-    this.authenticationService.login(user);
+    this.authenticationService.login(user)
+    .toPromise()
+    .then((response) =>{
+      alert('Success');
+    })
+    .catch((error) =>{
+      alert('Error');
+    });
+
     this.isLoading = false;
   }
 }

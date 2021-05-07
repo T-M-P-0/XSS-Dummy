@@ -136,6 +136,7 @@ async function persistUser(data, databaseName, tableName){
  */
 async function doesExist(data, databaseName, tableName){
     var connection = null;
+    var exists = true;
 
     await rethinkDB.connect({ host: 'localhost', port: 28015 })
       .then(conn =>{
@@ -146,19 +147,24 @@ async function doesExist(data, databaseName, tableName){
           console.error('An error occurred: ' + error);
       });
 
-      await rethinkDB
+      var exists = await rethinkDB
       .db(databaseName)
       .table(tableName)
       .filter({"_fullName" : data._fullName, "_password" : data._password})
       .count()
-      .run()
+      .run(connection)
       .then((result) =>{
-          return result == 1;
+          if (result == 1){
+              console.log('Setting exists to true.');
+              return true;
+          }
       })
       .catch((error) =>{
           console.error('Database error occurred: ' + error);
           return false;
       });
+
+      return exists;
 }
 
 app.post("/user/add", function(request, response){
@@ -179,13 +185,15 @@ app.post("/user/add", function(request, response){
     });
 });
 
-app.get("/user/authenticate", function(request, response){
+app.post("/user/authenticate", function(request, response){
     console.log('User is attempting to log in..');
     let bodyData = request.body;
     console.log(bodyData);
 
     doesExist(bodyData, databaseName, 'Users')
     .then((resp) =>{
+        console.log(resp);
+        
         if (resp){
             console.log('User found.');
             response.status(200).send();
