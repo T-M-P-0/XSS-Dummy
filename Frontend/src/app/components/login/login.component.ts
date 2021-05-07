@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Injectable, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-
+import { UserDto } from '../../../../../Shared/user.dto';
 
 @Component({
   selector: 'app-login',
@@ -21,11 +21,16 @@ export class LoginComponent implements OnInit {
 
   public onSubmit(): void {
     this.isLoading = true;
-    console.log("True");
-    console.log(this.username);
-    console.log(this.password);
-    this.sleep(5000);
-    console.log("false");
+    let user = new UserDto("Test", "Test");
+
+    this.httpClient.post('http://localhost:41005/user/add', user.fullName)
+    .toPromise()
+    .then((response) =>{
+      alert('Success');
+    })
+    .catch((error) =>{
+      alert(error);
+    });
 
     this.isLoading = false;
   }

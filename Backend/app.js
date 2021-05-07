@@ -1,9 +1,11 @@
 const express = require('express');
 const rethinkDB = require('rethinkdb');
-
 const databaseName = "XSSDemoDatabase";
 const app = express();
 const port = 41005;
+
+app.use(express.json());
+app.use(express.urlencoded({extended : true}));
 
 async function initializeDatabase(){
     console.log('Initializing database..');
@@ -101,9 +103,10 @@ function createTable(connection, databaseName, tableName){
 
 app.post("/user/add", function(request, response){
     console.log('Adding user.');
-    let bodyData = request.body;
+    const bodyData = request.body;
 
     console.log(bodyData);
+    response.status(201).send(bodyData);
 });
 
 app.post("/postentry", function (request, response) {
