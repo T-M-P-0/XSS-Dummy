@@ -1,16 +1,22 @@
 const express = require('express');
 const rethinkDB = require('rethinkdb');
+const cors = require('cors');
+
 const databaseName = "XSSDemoDatabase";
 const app = express();
 const port = 41005;
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
 
+/**
+ * Creates the tables and database if not already existing.
+ */
 async function initializeDatabase(){
     console.log('Initializing database..');
 
-    let connection = null;
+    var connection = null;
     
       await rethinkDB.connect({ host: 'localhost', port: 28015 })
       .then(conn =>{
@@ -101,13 +107,95 @@ function createTable(connection, databaseName, tableName){
     });
 }
 
-app.post("/user/add", function(request, response){
-    console.log('Adding user.');
-    const bodyData = request.body;
+/**
+ * Persists a user object in the database.
+ * @param {*} data The data to persist in the database.
+ * @param {*} databaseName The name of the database.
+ * @param {*} tableName The name of the table.
+ */
+async function persistUser(data, databaseName, tableName){
+    var connection = null;
 
-    console.log(bodyData);
-    response.status(201).send(bodyData);
+    await rethinkDB.connect({ host: 'localhost', port: 28015 })
+      .then(conn =>{
+          connection = conn;
+          console.log('Database connection established.');
+      })
+      .catch((error) =>{
+          console.error('An error occurred: ' + error);
+      });
+
+      await rethinkDB.db(databaseName).table(tableName).insert(data).run(connection);
+}
+
+/**
+ * Checks whether a user exists.
+ * @param {*} data The data to check for existence. 
+ * @param {*} databaseName The database name.
+ * @param {*} tableName The name of the table in which to look for the data.
+ */
+async function doesExist(data, databaseName, tableName){
+    var connection = null;
+
+    await rethinkDB.connect({ host: 'localhost', port: 28015 })
+      .then(conn =>{
+          connection = conn;
+          console.log('Database connection established.');
+      })
+      .catch((error) =>{
+          console.error('An error occurred: ' + error);
+      });
+
+      await rethinkDB
+      .db(databaseName)
+      .table(tableName)
+      .filter({"_fullName" : data._fullName, "_password" : data._password})
+      .count()
+      .run()
+      .then((result) =>{
+          return result == 1;
+      })
+      .catch((error) =>{
+          console.error('Database error occurred: ' + error);
+          return false;
+      });
+}
+
+app.post("/user/add", function(request, response){
+    console.log('User is registrating..');    
+    let bodyData = request.body;
+
+    console.log('Username: ' + bodyData._fullName);
+    console.log('Password: ' + bodyData._password);
+
+    persistUser(bodyData, databaseName, 'Users')
+    .then(() =>{
+        console.log('Object persisted in database.');
+        response.status(201).send('user was successfully registrated.');
+    })
+    .catch((error) =>{
+        console.error('Could not persist object in database due to error: ' + error);
+        response.status(400).send('Could not perform registration.');
+    });
 });
+
+app.get("/user/authenticate", function(request, response){
+    console.log('User is attempting to log in..');
+    let bodyData = request.body;
+    console.log(bodyData);
+
+    doesExist(bodyData, databaseName, 'Users')
+    .then((resp) =>{
+        if (resp){
+            console.log('User found.');
+            response.status(200).send();
+        }
+        else{
+            console.log('User not found');
+            response.status(401).send();
+        }
+    });
+})
 
 app.post("/postentry", function (request, response) {
     console.log('Incoming entry');

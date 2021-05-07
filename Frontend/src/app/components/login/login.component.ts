@@ -30,13 +30,4 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(user);
     this.isLoading = false;
   }
-
-private sleep(milliseconds : number) : void {
-  const date = Date.now();
-  let currentDate = null;
-  do {
-    currentDate = Date.now();
-  } while (currentDate - date < milliseconds);
-}
-
 }
