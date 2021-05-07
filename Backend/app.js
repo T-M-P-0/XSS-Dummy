@@ -167,6 +167,57 @@ async function doesExist(data, databaseName, tableName){
       return exists;
 }
 
+/**
+ * Gets all currently stored forum entries.
+ * @param {*} databaseName The name of the database. 
+ * @param {*} tableName The name of the table to get data from.
+ * @returns A collection of entries.
+ */
+async function getAllEntries(databaseName, tableName){
+    var connection = null;
+    
+    await rethinkDB.connect({ host: 'localhost', port: 28015 })
+      .then(conn =>{
+          connection = conn;
+          console.log('Database connection established.');
+      })
+      .catch((error) =>{
+          console.error('An error occurred: ' + error);
+      });
+
+      var entries = await rethinkDB
+      .db(databaseName)
+      .table(tableName)
+      .run(connection);
+
+      return entries.toArray();
+}
+
+/**
+ * Stores a forum entry in the database.
+ * @param {*} entry The entry to persist. 
+ * @param {*} databaseName The name of the database.
+ * @param {*} tableName The name of the table.
+ */
+async function storeEntry(entry, databaseName, tableName){
+    var connection = null;
+
+    await rethinkDB.connect({ host: 'localhost', port: 28015 })
+      .then(conn =>{
+          connection = conn;
+          console.log('Database connection established.');
+      })
+      .catch((error) =>{
+          console.error('An error occurred: ' + error);
+      });
+
+      await rethinkDB
+      .db(databaseName)
+      .table(tableName)
+      .insert(entry)
+      .run(connection);
+}
+
 app.post("/user/add", function(request, response){
     console.log('User is registrating..');    
     let bodyData = request.body;
@@ -209,7 +260,31 @@ app.post("/postentry", function (request, response) {
     console.log('Incoming entry');
     let bodyData = request.body;
 
+    storeEntry(bodyData, databaseName, "Entries")
+    .then(() =>{
+        console.log('Entry successfully persisted.');
+        console.log(bodyData);
+        response.status(201).send();
+    })
+    .catch((error) =>{
+        console.error('Error during posting entry: ' + error);
+        response.status(400).send();
+    })
     console.log(bodyData);
+});
+
+app.get('/getEntries', function(request, response) {
+    console.log('Requesting entries..');
+
+    getAllEntries(databaseName, "Entries")
+    .then((resp) =>{
+        console.log(resp);
+        response.status(200).send(resp);
+    })
+    .catch((error) =>{
+        console.log('Error occurred while fetching entries: ' + error);
+        response.status(404).send();
+    })
 });
 
 initializeDatabase();
