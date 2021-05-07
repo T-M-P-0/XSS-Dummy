@@ -2,7 +2,7 @@
 
 <html lang="en">
 
-<head> 
+<head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,25 +19,25 @@
             <h4 class="card-header">Sign in</h4>
             <div class="card-body">
                 <div class="p-grid p-fluid" id="loginData">
-                    <form #loginForm="ngForm">
-                                     <div class="p-col-12 p-md-2">
-                        <div class="p-inputgroup">
-                            <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
-                            <input  name="username" type="username" pInputText placeholder="Username" [(ngModel)]="username">
+                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                        <div class="p-col-12 p-md-2">
+                            <div class="p-inputgroup">
+                                <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+                                <input name="username" type="username" pInputText placeholder="Username" [(ngModel)]="username">
+                            </div>
                         </div>
-                    </div>
-                    <div class="p-col-12 p-md-2 ">
-                        <div class="p-inputgroup ">
-                            <span class="p-inputgroup-addon "><i class="pi pi-lock "></i></span>
-                            <p-password name="password" [(ngModel)]="password" InputText placeholder="Password" [feedback]="false" [toggleMask]="true"></p-password>
+                        <div class="p-col-12 p-md-2 ">
+                            <div class="p-inputgroup ">
+                                <span class="p-inputgroup-addon "><i class="pi pi-lock "></i></span>
+                                <p-password name="password" [(ngModel)]="password" InputText placeholder="Password" [feedback]="false" [toggleMask]="true"></p-password>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        
-                    </div>
-                    <div class="p-col-12 p-md-2 " id="buttonGroup">
+                        <div class="form-group">
 
-                        <span class="btn-group">   
+                        </div>
+                        <div class="p-col-12 p-md-2 " id="buttonGroup">
+
+                            <span class="btn-group">   
                             <div class="form-group">
                             <button 
                              id="loginButton"
@@ -46,24 +46,25 @@
                              icon="pi pi-check" iconPos="right"
                              (click)="onSubmit()" [disabled] = "isLoading">
                                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-1"></span>
-                                 
+
                             </button>
-                            </div>
-                         <div class="form-group">
-                            <button pButton pRipple type="button" label="Register" class="p-button-raised p-button-text" >
+                        </div>
+                        <div class="form-group">
+                            <button pButton pRipple type="button" label="Register" class="p-button-raised p-button-text">
                           
                             </button>
-                         </div>
-                          
+                        </div>
+
                         </span>
 
-                    </div>
-                    </form>
-                    <!-- Form Group for binding. -->
-       
                 </div>
+                </form>
+                <!-- Form Group for binding. -->
+
             </div>
         </div>
     </div>
+    </div>
 </body>
+
 </html>
