@@ -15,6 +15,10 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 
+import { JwtInterceptor } from './session-helpers/jwt.interceptor';
+import { ErrorInterceptor } from './session-helpers/error.interceptor';
+
+
 @NgModule({
   declarations: [AppComponent, LoginComponent, RegisterComponent, HomeComponent],
   imports: [
@@ -31,7 +35,8 @@ import { HomeComponent } from './components/home/home.component';
     
 
   ],
-  providers: [],
+  providers: [ { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+                       { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

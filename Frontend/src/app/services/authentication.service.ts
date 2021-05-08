@@ -29,8 +29,7 @@ export class AuthenticationService {
 
 
   login(user : UserDto) {
-    alert("GG");
-    return this.httpClient.post('http://localhost:41005/user/authenticate', user)
+    return this.httpClient.post('http://c671be603ede.ngrok.io/user/authenticate', user)
         .pipe(
           map((user) => {
           // store user details and jwt token in local storage to keep user logged in between page refreshes

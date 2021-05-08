@@ -17,7 +17,7 @@ export class RegistrationService {
   }
 
   public register(user: UserDto) {
-    this.httpClient.post('http://localhost:41005/user/register', user).pipe(first())
+    this.httpClient.post('http://c671be603ede.ngrok.io/user/add', user).pipe(first())
     .subscribe(
       (data) => {
         data.valueOf;

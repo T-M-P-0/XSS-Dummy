@@ -14,12 +14,10 @@ import { AuthenticationService } from '../../services/authentication.service';
 })
 @Injectable()
 export class LoginComponent implements OnInit {
-  private formBuilder: FormBuilder | undefined;
+
   public username: string | undefined;
   public password: string | undefined;
   public isSubmitted: boolean = false;
-  public loginForm: FormGroup;
-
   public isLoading: boolean = false;
 
   constructor(
@@ -28,17 +26,12 @@ export class LoginComponent implements OnInit {
     ) {
       if (this.authenticationService.currentUserValue)
         this.router.navigate(['/']);
-
-      this.loginForm = new FormGroup({});
     }
 
   ngOnInit(): void {
     
   }
 
-  get f() {
-    return this.loginForm.controls;
-  }
 
   public onSubmit(): void {
     this.isLoading = true;
@@ -48,6 +41,7 @@ export class LoginComponent implements OnInit {
       .toPromise()
       .then((response) => {
         alert('Success');
+        this.router.navigate(['']);
       })
       .catch((error) => {
         alert('Error');
