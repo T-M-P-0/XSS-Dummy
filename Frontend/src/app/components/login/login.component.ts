@@ -4,7 +4,7 @@ import { Component, Injectable, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserDto } from '../../../../../Shared/user.dto';
-import { AuthenticationService } from '../../services/authentication.service'
+import { AuthenticationService } from '../../services/authentication.service';
 
 
 @Component({
@@ -17,9 +17,10 @@ export class LoginComponent implements OnInit {
   private formBuilder: FormBuilder | undefined;
   public username: string | undefined;
   public password: string | undefined;
+  public isSubmitted: boolean = false;
   public loginForm: FormGroup;
 
-  public isLoading: Boolean = false;
+  public isLoading: boolean = false;
 
   constructor(
     private router: Router,
@@ -33,6 +34,10 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     
+  }
+
+  get f() {
+    return this.loginForm.controls;
   }
 
   public onSubmit(): void {
