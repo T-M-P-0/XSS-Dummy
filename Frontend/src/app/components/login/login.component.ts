@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit {
       .login(user)
       .toPromise()
       .then((response) => {
-        alert('Success');
         this.router.navigate(['/home']);
       })
       .catch((error) => {
