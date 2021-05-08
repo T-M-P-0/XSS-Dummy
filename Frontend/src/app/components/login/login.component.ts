@@ -54,5 +54,10 @@ export class LoginComponent implements OnInit {
       });
 
     this.isLoading = false;
+    
+  }
+
+  public switchToRegistration() {
+    this.router.navigate(['/register']);
   }
 }
