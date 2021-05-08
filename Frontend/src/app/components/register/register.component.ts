@@ -45,6 +45,7 @@ export class RegisterComponent implements OnInit {
         }
 
         this.loading = true;
+        
         this.registrationService.register(this.form.value);
     }
 }
