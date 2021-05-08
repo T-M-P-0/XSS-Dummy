@@ -5,6 +5,7 @@ import { FormBuilder } from '@angular/forms';
 import { AlertService } from '../../services/alert.service';
 import { RegistrationService } from '../../services/registration.service';
 import { UserDto } from '../../../../../Shared/user.dto';
+import { first } from 'rxjs/operators';
 
 @Component({ templateUrl: 'register.component.html' })
 export class RegisterComponent implements OnInit {
@@ -33,7 +34,15 @@ export class RegisterComponent implements OnInit {
 
         this.isLoading = true;
         var newUser = new UserDto(this.username || "" ,  this.password || "");
-        this.registrationService.register(newUser);
+        this.registrationService.register(newUser).pipe(first()).subscribe((data) => {
+            this.alertService.success('Registration successful', true);
+            this.router.navigate(['/login']);
+
+        },
+        (error) => {
+            this.alertService.error(error);
+            this.isLoading = false;
+        });
     }
 
     switchToLogin(){

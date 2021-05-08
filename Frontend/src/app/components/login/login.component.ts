@@ -2,7 +2,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Injectable, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 import { UserDto } from '../../../../../Shared/user.dto';
 import { AuthenticationService } from '../../services/authentication.service';
 
@@ -22,6 +23,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private authenticationService: AuthenticationService
     ) {
       if (this.authenticationService.currentUserValue)
@@ -41,7 +43,7 @@ export class LoginComponent implements OnInit {
       .toPromise()
       .then((response) => {
         alert('Success');
-        this.router.navigate(['']);
+        this.router.navigate(['/home']);
       })
       .catch((error) => {
         alert('Error');
