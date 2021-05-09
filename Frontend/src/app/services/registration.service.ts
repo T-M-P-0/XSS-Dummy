@@ -17,6 +17,6 @@ export class RegistrationService {
   }
 
   public register(user: UserDto) {
-    return this.httpClient.post('http://c671be603ede.ngrok.io/user/add', user);
+    return this.httpClient.post('http://0487270d174b.ngrok.io/user/add', user);
   }
 }
