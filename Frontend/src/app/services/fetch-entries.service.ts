@@ -13,7 +13,7 @@ public async fetchEntries() : Promise<forumEntry[]> {
 
   let returned : forumEntry[] = [];
 
-  await this.httpClient.get('http://0487270d174b.ngrok.io/getentries').toPromise()
+  await this.httpClient.get('http://localhost:41005/getentries').toPromise()
   .then((result) =>{
     returned = result as forumEntry[];
 
@@ -29,7 +29,7 @@ public async fetchEntries() : Promise<forumEntry[]> {
 }
 
 public postEntry(entry : forumEntry) {
-  return this.httpClient.post('http://0487270d174b.ngrok.io/postentry', entry).toPromise();
+  return this.httpClient.post('http://localhost:41005/postentry', entry).toPromise();
 }
 
 }

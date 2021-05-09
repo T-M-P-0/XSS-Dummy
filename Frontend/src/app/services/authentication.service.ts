@@ -13,6 +13,6 @@ export class AuthenticationService {
 
 
   login(user : UserDto) {
-    return this.httpClient.post('http://0487270d174b.ngrok.io/user/authenticate', user);
+    return this.httpClient.post('http://localhost:41005/user/authenticate', user);
   }
 }

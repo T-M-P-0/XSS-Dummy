@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/home']);
       })
       .catch((error) => {
-        alert('Error');
+        alert('Invalid user data. Please register.');
       });
 
     this.isLoading = false;
