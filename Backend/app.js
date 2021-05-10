@@ -1,6 +1,7 @@
 const express = require('express');
 const rethinkDB = require('rethinkdb');
 const cors = require('cors');
+const sanitizeHtml = require('sanitize-html');
 
 const databaseName = "XSSDemoDatabase";
 const app = express();
@@ -259,6 +260,9 @@ app.post("/user/authenticate", function(request, response){
 app.post("/postentry", function (request, response) {
     console.log('Incoming entry');
     let bodyData = request.body;
+    
+    bodyData.Text = sanitizeHtml(bodyData.Text);
+    bodyData.Author = sanitizeHtml(bodyData.Author);
 
     storeEntry(bodyData, databaseName, "Entries")
     .then(() =>{
