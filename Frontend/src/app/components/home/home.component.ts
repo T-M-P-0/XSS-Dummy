@@ -33,15 +33,16 @@ public entries : string;
     }
   }
 
+  // We have to modify the method that causes XSS
   public convertToHTML(entries : forumEntry[]) : string{
     var entriesContainer = document.getElementById('forumposts');
     let htmlString = '';
 
     entries.forEach(entry => {
       if (entriesContainer != null){
-        entriesContainer.innerHTML = entriesContainer.innerHTML.concat('<h2>' + entry.Author + '</h2><br>' + entry.Text);
-      }
-    });
+        entriesContainer.innerHTML = entriesContainer.innerHTML.concat('<h2>' + this.escapeCharactersForHtmlDisplay(entry.Author) + '</h2><br>' + this.escapeCharactersForHtmlDisplay(entry.Text)); // This is the problem, right here
+      }                                                                                                                   // The untrusted data is added to the HTML code,  
+    });                                                                                                                   // namely "entry.Author" as well as "entry.Text"
    
 //    alert(entriesContainer?.innerHTML);
        // htmlString = htmlString.concat('<img src="' + element.Text + '"/>');
@@ -50,6 +51,19 @@ public entries : string;
 
     return htmlString;
   }
+
+  // We also have to create our own method to escape characters that will we injected, or concatenated in the HTML
+  public escapeCharactersForHtmlDisplay(inputToEscape: string) : string{
+    const ESC_MAP: {[index: string]: any} = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#x27;',
+      "/": '&#x2F;'};
+      const reg = /[&<>"'/]/ig;
+      return inputToEscape.replace(reg, (match)=>(ESC_MAP[match]));    
+  } 
 
   public onSubmitEntry() : void{
     let newEntry = new forumEntry(this.forumPost, this.author);
