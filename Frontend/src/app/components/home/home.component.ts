@@ -39,7 +39,9 @@ public entries : string;
 
     entries.forEach(entry => {
       if (entriesContainer != null){
-        entriesContainer.innerHTML = entriesContainer.innerHTML.concat('<h2>' + entry.Author + '</h2><br>' + entry.Text);
+        console.log(`test ${entry.Text}`);
+                                                                                                      //calling the replacing method with the entry text to display it as text
+  entriesContainer.innerHTML = entriesContainer.innerHTML.concat('<h2>' + entry.Author + '</h2><br>' + this.htmlEscapeCharacters(entry.Text));
       }
     });
    
@@ -49,6 +51,18 @@ public entries : string;
     
 
     return htmlString;
+  }
+
+  //To replace the "unwanted" characters with html entity encoding to prevent the switching into execution context
+  public htmlEscapeCharacters(input: string) : string{
+    const ESC_MAP: {[index: string]: any} = {
+      '&': '&amp',
+      '<': '&lt',
+      '>': '&gt',
+      '"': '&quot',
+      "'": '&#x27'};
+      const reg = /[&<>"']/ig;
+      return input.replace(reg, (match)=>(ESC_MAP[match]));    
   }
 
   public onSubmitEntry() : void{
