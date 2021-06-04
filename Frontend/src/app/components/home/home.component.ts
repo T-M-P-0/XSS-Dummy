@@ -39,9 +39,8 @@ public entries : string;
 
     entries.forEach(entry => {
       if (entriesContainer != null){
-        console.log(`test ${entry.Text}`);
-                                                                                                      //calling the replacing method with the entry text to display it as text
-  entriesContainer.innerHTML = entriesContainer.innerHTML.concat('<h2>' + entry.Author + '</h2><br>' + this.htmlEscapeCharacters(entry.Text));
+                                                                            //calling the replacing method with the entry author and entry text to display it as plain text
+  entriesContainer.innerHTML = entriesContainer.innerHTML.concat('<h2>' + this.htmlEscapeCharacters(entry.Author) + '</h2><br>' + this.htmlEscapeCharacters(entry.Text));
       }
     });
    
